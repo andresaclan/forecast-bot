@@ -1,33 +1,47 @@
-import discord
 import os
 from dotenv import load_dotenv
-import weather
+import requests
+import discord
+from discord.ext import commands
 
 # load .env variables
 load_dotenv()
 
+
 intents = discord.Intents.default()
 intents.message_content = True
 
-client = discord.Client(intents=intents)
+bot = commands.Bot(command_prefix='$', intents=intents)
 
-@client.event
+@bot.event
 async def on_ready():
-    print(f'We have logged in as {client.user}')
+    print(f'We have logged in as {bot.user}')
 
-@client.event
-async def on_message(message):
-    if message.author == client.user:
-        return
+# weather command
+@bot.command()
+async def weather(ctx: commands.Context, *, city):
+    url = "http://api.weatherapi.com/v1/current.json"
+    params = {
+        "key": os.getenv('OPEN_WEATHER_KEY'),
+        "q": city
+    }
 
-    if message.content.startswith('$getweather'):
-        response = weather.fetch_weather('San Jose')
-        embed = discord.Embed(title='Weather', description='The current, realtime weather data for San Jose')
-        embed.set_thumbnail(url='https://cdn.discordapp.com/avatars/1123321796129734676/e39042077a496ed27c93d35780abb28d.webp?size=80')
-        embed.add_field(name='Temperature in Fahrenheit', value=response["temp_f"], inline=True)
-        embed.add_field(name='UV Index', value=response["uv_index"], inline=True)
-        await message.channel.send(embed=embed)
+    response = requests.get(url, params=params)
+    data = response.json()
+    location = data['location']['name']
+    temp_c = data['current']['temp_c']
+    temp_f = data['current']['temp_f']
+    uv = data['current']['uv']
+    image_url = "http:" + data['current']['condition']['icon']
+    condition = data['current']['condition']['text']
+
+    # build embed response
+    embed = discord.Embed(title='Weather', description=f'The current weather condition in `{location}` is `{condition}`.')
+    embed.set_thumbnail(url=image_url)
+    embed.add_field(name='Temperature', value=f"C: {temp_c} | F: {temp_f}", inline=True)
+    embed.add_field(name='UV Index', value=uv, inline=True)
+    await ctx.channel.send(embed=embed)
 
 
-client.run(os.getenv('TOKEN'))
+bot.run(os.getenv('TOKEN'))
 
