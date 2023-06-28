@@ -1,39 +1,42 @@
-Discord Weather Bot
+# Discord Weather Bot
   A simple Discord bot that provides weather information for a given city using the WeatherAPI.
+## Add it to your server [here](https://discord.com/api/oauth2/authorize?client_id=1123321796129734676&permissions=84992&scope=bot)
 
-**Prerequisites**
-Before running the bot, make sure you have the following installed:
+# Requirements
 
 Python 3.x
-  python-dotenv package
-  requests package
-  discord.py package
-  Setup
 
-**Setup**
+## Local Installation & Usage
 
 Clone the repository:
-  git clone https://github.com/your-username/discord-weather-bot.git
-  
-Install the required packages:
-  pip install python-dotenv discord requests
 
-Create a new Discord bot and obtain its token. You can follow the official Discord documentation on how to create a bot and get its token.
+```sh
+git clone https://github.com/andresaclan/discordbot.git
+```
+pip install python-dotenv discord requests
 
-Create a .env file in the root directory of the project and add the following variables:
-  TOKEN=<your_discord_bot_token>
-  OPEN_WEATHER_KEY=<your_open_weather_map_api_key>
+### Getting Started
+Create a new Discord bot and obtain its token. You can follow the official Discord [documentation](https://discordpy.readthedocs.io/en/stable/discord.html) on how to create a bot and get its token.
 
+### Authentication    
+Create a .env file in the root directory of the project and add the following variables:\
+\
+TOKEN=<your_discord_bot_token>\
+OPEN_WEATHER_KEY=<your_open_weather_map_api_key>
+
+### Setup
 Customize the command prefix in the Python code ($ by default) if desired.
 
+### Usage
 Run the bot:
-  python bot.py
-
-**Usage**
+```sh
+python bot.py
+```
 The bot listens for commands in Discord channels. Here's an example of how to use it:
-  $weather <city>
-
+```sh
+$weather <city>
+```
 Replace <city> with the name of the city you want to get the weather information for.
 
-**Contributing**
+## Contributing
 Contributions are welcome! If you have any suggestions, bug reports, or feature requests, please open an issue or submit a pull request.
